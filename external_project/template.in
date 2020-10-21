@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 2.8.2)
+project(${EXTERN_PROJ_NAME}-project NONE)
+
+include(ExternalProject)
+ExternalProject_Add(${EXTERN_PROJ_NAME}
+  GIT_REPOSITORY ${EXTERN_PROJ_GIT}
+  GIT_TAG        ${EXTERN_PROJ_GIT_TAG}
+  CMAKE_ARGS     -DCMAKE_INSTALL_PREFIX=${EXTERN_PROJ_DIR} ${EXTERN_PROGS_ARGS}
+  BUILD_ALWAYS 1
+)
