@@ -1,1 +1,2 @@
-include(external_project/extern_project.cmake)
+include(ProcessorCount)
+add_subdirectory(external_project)

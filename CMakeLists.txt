@@ -1,1 +1,1 @@
-include(bits)
+include(bits.cmake)
