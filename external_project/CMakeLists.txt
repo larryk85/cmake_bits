@@ -5,7 +5,7 @@ set(BITS_EXTERN_PROJ_BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}"
 
 macro(extern_project name)
    set(options OPTIONAL NO_FORWARD_ARGS SKIP_INSTALL)
-   set(oneValueArgs REPO TAG DIR ADD_SUBDIR)
+   set(oneValueArgs REPO TAG DIR ADD_SUBDIR VERSION)
    set(multiValueArgs ARGS)
    cmake_parse_arguments(EXTERN_PROJ "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
 
@@ -43,6 +43,6 @@ macro(extern_project name)
    if(EXTERN_PROJ_ADD_SUBDIR)
       add_subdirectory(${BITS_EXTERN_PROJ_BIN_DIR}/${EXTERN_PROJ_NAME}/${EXTERN_PROJ_NAME}-prefix/src/${EXTERN_PROJ_NAME})
    else()
-      find_package(${EXTERN_PROJ_NAME})
+      find_package(${EXTERN_PROJ_NAME} ${EXTERN_PROJ_VERSION} QUIET)
    endif()
 endmacro()
