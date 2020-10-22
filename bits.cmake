@@ -14,5 +14,7 @@ macro(add_project_dependency name)
       extern_project(${name}
          VERSION ${ADD_DEP_VERSION}
          ${ARGN})
+   else()
+      list(APPEND CMAKE_MODULE_PATH "${name_DIR}")
    endif()
 endmacro()
