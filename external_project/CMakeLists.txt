@@ -4,7 +4,7 @@ set(BITS_EXTERN_PROJ_BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}"
    CACHE FILEPATH "file path to the external_project directory")
 
 macro(extern_project name)
-   set(options OPTIONAL NO_FORWARD_ARGS SKIP_INSTALL)
+   set(options OPTIONAL NO_FORWARD_ARGS SKIP_INSTALL SKIP_BUILD)
    set(oneValueArgs REPO TAG DIR ADD_SUBDIR VERSION)
    set(multiValueArgs ARGS)
    cmake_parse_arguments(EXTERN_PROJ "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
@@ -25,6 +25,13 @@ macro(extern_project name)
       set(EXTERN_PROJ_INSTALL_CMD "cmake -E echo \"Skipping install step.\"")
    else()
       set(EXTERN_PROJ_INSTALL_CMD ${CMAKE_COMMAND} --build . --target install)
+   endif()
+
+   if(EXTERN_PROJ_SKIP_BUILD)
+      set(EXTERN_PROJ_BUILD_CMD "cmake -E echo \"Skipping build step.\"")
+      set(EXTERN_PROJ_INSTALL_CMD "cmake -E echo \"Skipping install step.\"")
+   else()
+      set(EXTERN_PROJ_BUILD_CMD ${CMAKE_COMMAND} --build . --parallel ${PROC_COUNT})
    endif()
 
    configure_file(${BITS_EXTERN_PROJ_SOURCE_DIR}/template.in
