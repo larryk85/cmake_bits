@@ -3,8 +3,10 @@ include(ProcessorCount)
 add_subdirectory(external_project)
 
 macro(add_project_dependency name)
+   set(options)
    set(oneValueArgs VERSION)
-   cmake_parse_arguments(ADD_DEP "${oneValueArgs}" "${ARGN}")
+   set(multiValueArgs)
+   cmake_parse_arguments(ADD_DEP "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
 
    find_package(${name} ${ADD_DEP_VERSION} QUIET)
 
