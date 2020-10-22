@@ -15,6 +15,6 @@ macro(add_project_dependency name)
          VERSION ${ADD_DEP_VERSION}
          ${ARGN})
    else()
-      list(APPEND CMAKE_MODULE_PATH "${name_DIR}")
+      list(APPEND CMAKE_MODULE_PATH "${${name}_DIR}")
    endif()
 endmacro()
