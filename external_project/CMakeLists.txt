@@ -35,7 +35,7 @@ macro(extern_project name)
    list(APPEND CMAKE_PREFIX_PATH "${EXTERN_PROJ_DIR}/lib/cmake")
 
    if(EXTERN_PROJ_ADD_SUBDIR)
-      add_subdirectory(${BITS_EXTERN_PROJ_BIN_DIR}/${EXTERN_PROJ_NAME}-prefix/src/${EXTERN_PROJ_NAME})
+      add_subdirectory(${BITS_EXTERN_PROJ_BIN_DIR}/${EXTERN_PROJ_NAME}/${EXTERN_PROJ_NAME}-prefix/src/${EXTERN_PROJ_NAME})
    else()
       find_package(${EXTERN_PROJ_NAME})
    endif()
