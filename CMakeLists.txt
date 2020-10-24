@@ -8,14 +8,16 @@ option(ENABLE_TESTS "enable unit tests" Off)
 if(ENABLE_TESTS)
 endif()
 
-#git_submodule_update()
+create_version(
+   MAJOR 2
+   MINOR 0
+   PATCH 2
+   SUFF rc1
+   WITH_GIT
+)
 
-set(BR "FOO")
+get_version(
+   VERSION VER
+)
 
-git_info(BRANCH BR
-         COMMIT CM
-         IS_DIRTY ID)
-
-message(STATUS "Branch : ${BR}")
-message(STATUS "Commit : ${CM}")
-message(STATUS "Is Dirty : ${ID}")
+message(STATUS "v${VER}")

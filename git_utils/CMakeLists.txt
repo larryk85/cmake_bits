@@ -59,7 +59,7 @@ function(git_info)
 
    if(GIT_INFO_COMMIT)
       execute_process(
-         COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
+         COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
          WORKING_DIRECTORY         "${GIT_SRC_DIR}"
          OUTPUT_VARIABLE           _COMMIT
          OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -104,6 +104,4 @@ function(git_info)
       )
       set(${GIT_INFO_TAG} ${_TAG} PARENT_SCOPE)
    endif()
-
-
 endfunction()

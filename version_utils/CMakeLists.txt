@@ -1,0 +1,67 @@
+macro(create_version)
+   set(options WITH_GIT)
+   set(oneValueArgs MAJOR MINOR PATCH SUFF)
+   set(multiValueArgs)
+   cmake_parse_arguments(VER "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
+
+   if(VER_MAJOR)
+      set(PROJECT_VERSION_MAJOR ${VER_MAJOR})
+   else()
+      set(PROJECT_VERSION_MAJOR "0")
+   endif()
+   if(VER_MINOR)
+      set(PROJECT_VERSION_MINOR ${VER_MINOR})
+   else()
+      set(PROJECT_VERSION_MINOR "0")
+   endif()
+   if(VER_PATCH)
+      set(PROJECT_VERSION_PATCH ${VER_PATCH})
+   else()
+      set(PROJECT_VERSION_PATCH "0")
+   endif()
+
+   if(VER_SUFF)
+      if(VER_WITH_GIT)
+         git_info(
+            COMMIT         VCOMMIT
+            IS_DIRTY       VID
+            IS_DIRTY_ALPHA VIDA
+         )
+         if(VID)
+            set(PROJECT_VERSION_TWEAK "${VER_SUFF}-${VCOMMIT}-${VIDA}")
+         else()
+            set(PROJECT_VERSION_TWEAK "${VER_SUFF}-${VCOMMIT}")
+         endif()
+      else()
+         set(PROJECT_VERSION_TWEAK "${VER_SUFF}")
+      endif()
+   else()
+      if(VER_WITH_GIT)
+         git_info(
+            COMMIT         VCOMMIT
+            IS_DIRTY VID
+         )
+         if(${VID} STREQUAL "1")
+            set(PROJECT_VERSION_TWEAK "${VCOMMIT}-dirty")
+         else()
+            set(PROJECT_VERSION_TWEAK "${VCOMMIT}")
+         endif()
+      endif()
+   endif()
+
+   message(STATUS "lklsjd ${PROJECT_VERSION_TWEAK}")
+endmacro()
+
+macro(get_version)
+   set(options)
+   set(oneValueArgs VERSION)
+   set(multiValueArgs)
+   cmake_parse_arguments(VER "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
+
+   if(${PROJECT_VERSION_TWEAK} STREQUAL "")
+      set(${VER_VERSION} "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_TWEAK}-${PROJECT_VERSION_PATCH}")
+   else()
+      set(${VER_VERSION} "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_TWEAK}")
+   endif()
+endmacro()
+
