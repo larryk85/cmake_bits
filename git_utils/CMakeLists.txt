@@ -76,7 +76,7 @@ function(git_info)
          OUTPUT_STRIP_TRAILING_WHITESPACE
       )
 
-      if(${DIFF_RES} AND GIT_INFO_IS_DIRTY_ALPHA)
+      if(${DIFF_RES} EQUAL 1 AND GIT_INFO_IS_DIRTY_ALPHA)
          set(${GIT_INFO_IS_DIRTY_ALPHA} "true" PARENT_SCOPE)
       elseif(GIT_INFO_IS_DIRTY_ALPHA)
          set(${GIT_INFO_IS_DIRTY_ALPHA} "false" PARENT_SCOPE)

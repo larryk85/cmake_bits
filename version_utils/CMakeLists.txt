@@ -25,10 +25,9 @@ macro(create_version)
          git_info(
             COMMIT         VCOMMIT
             IS_DIRTY       VID
-            IS_DIRTY_ALPHA VIDA
          )
          if(VID)
-            set(PROJECT_VERSION_TWEAK "${VER_SUFF}-${VCOMMIT}-${VIDA}")
+            set(PROJECT_VERSION_TWEAK "${VER_SUFF}-${VCOMMIT}-dirty")
          else()
             set(PROJECT_VERSION_TWEAK "${VER_SUFF}-${VCOMMIT}")
          endif()
@@ -38,17 +37,16 @@ macro(create_version)
    else()
       if(VER_WITH_GIT)
          git_info(
-            COMMIT         VCOMMIT
+            COMMIT   VCOMMIT
             IS_DIRTY VID
          )
-         if(${VID} STREQUAL "1")
+         if(VID)
             set(PROJECT_VERSION_TWEAK "${VCOMMIT}-dirty")
          else()
             set(PROJECT_VERSION_TWEAK "${VCOMMIT}")
          endif()
       endif()
    endif()
-
    message(STATUS "lklsjd ${PROJECT_VERSION_TWEAK}")
 endmacro()
 
