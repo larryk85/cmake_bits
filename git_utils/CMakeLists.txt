@@ -43,34 +43,45 @@ endfunction()
 
 function(git_info)
    set(options)
-   set(oneValueArgs COMMIT IS_DIRTY IS_DIRTY_ALPHA)
+   set(oneValueArgs BRANCH COMMIT IS_DIRTY IS_DIRTY_ALPHA)
    set(multiValueArgs)
-   cmake_parse_arguments(GIT_INFO "${options}" "${oneValueArgs}" "${multiValueArgs}")
+   cmake_parse_arguments(GIT_INFO "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
 
-   if (GIT_INFO_COMMIT)
+   if(GIT_INFO_BRANCH)
+      execute_process(
+         COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
+         WORKING_DIRECTORY         "${GIT_SRC_DIR}"
+         OUTPUT_VARIABLE           _BRANCH
+         OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
+      set(${GIT_INFO_BRANCH} ${_BRANCH} PARENT_SCOPE)
+   endif()
+
+   if(GIT_INFO_COMMIT)
       execute_process(
          COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
          WORKING_DIRECTORY         "${GIT_SRC_DIR}"
-         OUTPUT_VARIABLE           ${GIT_INFO_COMMIT}
+         OUTPUT_VARIABLE           _COMMIT
          OUTPUT_STRIP_TRAILING_WHITESPACE
       )
+      set(${GIT_INFO_COMMIT} ${_COMMIT} PARENT_SCOPE)
    endif()
 
-   if (GIT_INFO_IS_DIRTY OR GIT_INFO_IS_DIRTY_ALPHA)
+   if(GIT_INFO_IS_DIRTY OR GIT_INFO_IS_DIRTY_ALPHA)
       execute_process(
          COMMAND ${GIT_EXECUTABLE} diff --quiet
-         WORKING_DIRECTORY         ${GIT_SRC_DIR}
+         WORKING_DIRECTORY         "${GIT_SRC_DIR}"
          RESULT_VARIABLE           DIFF_RES
          ERROR_QUIET
          OUTPUT_STRIP_TRAILING_WHITESPACE
       )
 
       if(${DIFF_RES} AND GIT_INFO_IS_DIRTY_ALPHA)
-         set(${GIT_INFO_IS_DIRTY_ALPHA} "true")
+         set(${GIT_INFO_IS_DIRTY_ALPHA} "true" PARENT_SCOPE)
       elseif(GIT_INFO_IS_DIRTY_ALPHA)
-         set(${GIT_INFO_IS_DIRTY_ALPHA} "false")
+         set(${GIT_INFO_IS_DIRTY_ALPHA} "false" PARENT_SCOPE)
       else()
-         set(${GIT_INFO_IS_DIRTY} ${DIFF_RES})
+         set(${GIT_INFO_IS_DIRTY} ${DIFF_RES} PARENT_SCOPE)
       endif()
    endif()
 
