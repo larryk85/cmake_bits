@@ -1,27 +1,63 @@
-function()
-   set(options ONLY_WARN)
-   set(oneValueArgs)
-   set(multiValueArgs)
-   cmake_parse_arguments(GIT_SUBMOD "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
+if(NOT PACKAGE_MAP_URL)
+   set(PACKAGE_MAP_URL "https://raw.githubusercontent.com/larryk85/package_map/main/package.map")
+endif()
 
-   if(GIT_SUBMOD_ONLY_WARN)
-      execute_process(
-         COMMAND ${GIT_EXECUTABLE} submodule status --recursive
+function(apt_install)
+   set(options HARD_FAIL)
+   set(oneValueArgs NAME VERSION)
+   set(multiValueArgs)
+   cmake_parse_arguments(PKG "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
+   find_program(APT_EXECUTABLE apt)
+   execute_process(
+         COMMAND ${APT_EXECUTABLE}
          WORKING_DIRECTORY         "${GIT_SRC_DIR}"
          OUTPUT_VARIABLE           STAT
          ERROR_QUIET
          OUTPUT_STRIP_TRAILING_WHITESPACE
-      )
-      string(REGEX MATCH "[-\+]" RE_MATCH ${STAT})
-      if(NOT RE_MATCH)
-         message(FATAL_ERROR "git submodules are out of sync with the project, please run `git submodule update --init --recursive`")
-      endif()
-   else()
-      execute_process(
-         COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
-         WORKING_DIRECTORY         "${GIT_SRC_DIR}"
-         ERROR_QUIET
-         OUTPUT_STRIP_TRAILING_WHITESPACE
-      )
+   )
+endfunction()
+
+function(get_system_name NAME)
+   if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+      set(${NAME} "osx" PARENT_SCOPE)
+   elseif(${CMAKE_SYSTEM_NAME} STREQUAL "
+endfunction()
+
+function(get_package_info NAME VERSION)
+   file(READ ${CMAKE_BINARY_DIR}/package_install/packages PACKAGE_LIST)
+   if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+      set(PKG_NM "brew")
    endif()
+   message(STATUS "${CMAKE_SYSTEM}")
+   #string(REGEX MATCH
+endfunction()
+
+function(install_package)
+   set(options HARD_FAIL)
+   set(oneValueArgs NAME VERSION)
+   set(multiValueArgs)
+   cmake_parse_arguments(PKG "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
+
+   if(NOT PACKAGE_MAP_URL)
+      set(PACKAGE_MAP_URL "https://raw.githubusercontent.com/larryk85/package_map/main/package.map")
+   endif()
+
+   set(PACKAGE_DIR ${CMAKE_BINARY_DIR}/package_install)
+   file(MAKE_DIRECTORY ${PACKAGE_DIR})
+
+   wget(
+      URL ${PACKAGE_MAP_URL}
+      FILENAME packages
+      DIR ${PACKAGE_DIR}
+      HARD_FAIL
+   )
+
+   get_package_info(foo 33)
+#execute_process(
+#         COMMAND ${GIT_EXECUTABLE} submodule status --recursive
+#         WORKING_DIRECTORY         "${GIT_SRC_DIR}"
+#         OUTPUT_VARIABLE           STAT
+#         ERROR_QUIET
+#         OUTPUT_STRIP_TRAILING_WHITESPACE
+#   )
 endfunction()

@@ -1,0 +1,45 @@
+function(get_system_info)
+   set(options)
+   set(oneValueArgs OS VERSION ARCH)
+   set(multiValueArgs)
+   cmake_parse_arguments(ASYS "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
+
+   set(SYS_NAME "osx")
+   if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+      set(${ASYS_OS} ${SYS_NAME} PARENT_SCOPE)
+      find_program(SW_VERS_EXE sw_vers)
+      execute_process(
+         COMMAND ${SW_VERS_EXE}
+         OUTPUT_VARIABLE RES
+         ERROR_QUIET
+         OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
+      string(REGEX MATCH "ProductVersion:.*" RM ${RES})
+      string(REGEX MATCH "([0-9]+(\.[0-9]+)(\.[0-9]+))" VERS ${RM})
+      set(${ASYS_VERSION} ${AYS_VERS} PARENT_SCOPE)
+   elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+      set(${AYS_OS} "osx" PARENT_SCOPE)
+   else()
+      message(WARNING "Currently this feature does not support ${CMAKE_SYSTEM_NAME}")
+   endif()
+endfunction()
+
+function(fail_on_system)
+   set(options)
+   set(oneValueArgs OS VERSION ARCH)
+   set(multiValueArgs)
+   cmake_parse_arguments(ASYS "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
+
+   get_system_info(_OS, _VERSION, _ARCH)
+   message(STATUS "O ${_OS}")
+   if(NOT ${ASYS_OS} EQUAL ${_OS})
+      if(ASYS_VERSION)
+         if(NOT ${ASYS_VERSION} STREQUAL ${_VERSION})
+            message(FATAL_ERROR "assert_system: ${ASYS_OS}@${ASYS_VERSION} not supported")
+         endif()
+      message(FATAL_ERROR "assert_system: ${ASYS_OS} not supported")
+   endif()
+   if(NOT ${ASYS_ARCH} STREQUAL ${_ARCH})
+      message(FATAL_ERROR "assert_system: ${ASYS_ARCH} architecture not supported")
+   endif()
+endfunction()

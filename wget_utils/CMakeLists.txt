@@ -1,5 +1,5 @@
 function(wget)
-   set(options HARD_FAIL)
+   set(options HARD_FAIL VERBOSE)
    set(oneValueArgs URL FILENAME DIR)
    set(multiValueArgs)
    cmake_parse_arguments(WGET "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
@@ -20,11 +20,15 @@ function(wget)
       message(FATAL_ERROR "wget not found")
    endif()
 
+   if(NOT WGET_VERBOSE)
+      set(VERBOSE "ERROR_QUIET")
+   endif()
+
    execute_process(
       COMMAND ${WGET_EXECUTABLE} --connect-timeout=2 -t1 -O ${WGET_DIR}/${WGET_FILENAME} ${WGET_URL}
       WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
       RESULT_VARIABLE RES
-      ERROR_QUIET
+      ${VERBOSE}
       OUTPUT_STRIP_TRAILING_WHITESPACE
    )
 

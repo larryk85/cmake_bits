@@ -18,8 +18,19 @@ get_version( VERSION VER )
 
 message(STATUS "v${VER}")
 
-wget(
-   FILENAME foo
-   DIR      "${CMAKE_BINARY_DIR}"
-   URL      "https://releases.hashicorp.com/terraform/0.12.2/terraform_0.12.2_linux_amd64.zip"
+#install_package(
+#   NAME foo
+#   VERSION 2.3
+#)
+
+get_system_info(
+   OS FOO
+   VERSION _V
+   ARCH _C)
+message(STATUS "FOO : ${_C}")
+
+fail_on_system(
+   OS Darwin
+   ARCH x86_64
+   #BITS 64
 )
