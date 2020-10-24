@@ -43,7 +43,7 @@ endfunction()
 
 function(git_info)
    set(options)
-   set(oneValueArgs BRANCH COMMIT IS_DIRTY IS_DIRTY_ALPHA)
+   set(oneValueArgs BRANCH COMMIT IS_DIRTY IS_DIRTY_ALPHA LOG_INFO)
    set(multiValueArgs)
    cmake_parse_arguments(GIT_INFO "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
 
@@ -84,5 +84,16 @@ function(git_info)
          set(${GIT_INFO_IS_DIRTY} ${DIFF_RES} PARENT_SCOPE)
       endif()
    endif()
+
+   if(GIT_INFO_LOG_INFO)
+      execute_process(
+         COMMAND ${GIT_EXECUTABLE} log origin..HEAD
+         WORKING_DIRECTORY         "${GIT_SRC_DIR}"
+         OUTPUT_VARIABLE           _LOG_INFO
+         OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
+      set(${GIT_INFO_LOG_INFO} ${_LOG_INFO} PARENT_SCOPE)
+   endif()
+
 
 endfunction()
