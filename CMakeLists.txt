@@ -12,12 +12,8 @@ create_version(
    MAJOR 2
    MINOR 0
    PATCH 2
-   SUFF rc1
-   WITH_GIT
 )
 
-get_version(
-   VERSION VER
-)
+get_version( VERSION VER )
 
 message(STATUS "v${VER}")

@@ -27,7 +27,6 @@ function(git_submodule_update)
          OUTPUT_STRIP_TRAILING_WHITESPACE
       )
       string(REGEX MATCH "[-\+]" RE_MATCH ${STAT})
-      message(STATUS "RE_MATCH ${RE_MATCH}")
       if(NOT RE_MATCH)
          message(FATAL_ERROR "git submodules are out of sync with the project, please run `git submodule update --init --recursive`")
       endif()
