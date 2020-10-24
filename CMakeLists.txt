@@ -8,4 +8,4 @@ option(ENABLE_TESTS "enable unit tests" Off)
 if(ENABLE_TESTS)
 endif()
 
-git_submodule_update( ONLY_WARN )
+git_submodule_update()
