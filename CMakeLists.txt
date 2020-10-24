@@ -17,3 +17,9 @@ create_version(
 get_version( VERSION VER )
 
 message(STATUS "v${VER}")
+
+wget(
+   FILENAME foo
+   DIR      "${CMAKE_BINARY_DIR}"
+   URL      "https://releases.hashicorp.com/terraform/0.12.2/terraform_0.12.2_linux_amd64.zip"
+)
