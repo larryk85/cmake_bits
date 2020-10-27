@@ -23,14 +23,7 @@ message(STATUS "v${VER}")
 #   VERSION 2.3
 #)
 
-get_system_info(
-   OS FOO
-   VERSION _V
-   ARCH _C)
-message(STATUS "FOO : ${_C}")
-
-fail_on_system(
-   OS Darwin
-   ARCH x86_64
-   #BITS 64
-)
+#fail_on_system(
+#   OS Darwin
+#   ARCH x86_64
+#)
