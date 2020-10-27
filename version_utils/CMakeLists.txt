@@ -49,6 +49,7 @@ macro(create_version)
          endif()
       endif()
    endif()
+   set(${PROJ}_VERSION ${PROJ}_VERSION_MAJOR.${PROJ}_VERSION_MINOR.${PROJ}_VERSION_PATCH)
 endmacro()
 
 macro(get_version)
