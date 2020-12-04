@@ -5,6 +5,7 @@ macro(create_version)
    cmake_parse_arguments(VER "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
 
    set(PROJ ${CMAKE_PROJECT_NAME})
+   message("PROJECT ${PROJ}")
 
    if(VER_MAJOR)
       set(${PROJ}_VERSION_MAJOR ${VER_MAJOR})
