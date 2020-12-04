@@ -4,12 +4,16 @@ set(BITS_EXTERN_PROJ_BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}"
    CACHE FILEPATH "file path to the external_project directory")
 
 macro(extern_project name)
-   set(options OPTIONAL NO_FORWARD_ARGS SKIP_INSTALL SKIP_BUILD)
+   set(options OPTIONAL NO_FORWARD_ARGS SKIP_INSTALL SKIP_BUILD SKIP_CONFIG)
    set(oneValueArgs REPO TAG DIR ADD_SUBDIR VERSION)
    set(multiValueArgs ARGS)
    cmake_parse_arguments(EXTERN_PROJ "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
 
    set(EXTERN_PROJ_NAME ${name})
+
+   if(EXTERN_PROJ_SKIP_CONFIG)
+      set(EXTERN_PROJ_CONFIGURE_CMD "CONFIGURE_COMMAND ")
+   endif()
 
    if(NOT EXTERN_PROJ_NO_FORWARD_ARGS)
       get_cmake_property(vars CACHE_VARIABLES)
