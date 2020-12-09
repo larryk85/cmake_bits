@@ -12,7 +12,7 @@ macro(extern_project name)
    set(EXTERN_PROJ_NAME ${name})
 
    if(EXTERN_PROJ_SKIP_CONFIG)
-      set(EXTERN_PROJ_CONFIGURE_CMD "CONFIGURE_COMMAND ")
+      set(EXTERN_PROJ_CONFIGURE_CMD "CONFIGURE_COMMAND = \"\"")
    endif()
 
    set(EXTERN_PROJ_CL_ARGS "${EXTERN_PROJ_ARGS}")
@@ -55,7 +55,7 @@ macro(extern_project name)
 
    if(EXTERN_PROJ_ADD_SUBDIR)
       set(_DIR ${BITS_EXTERN_PROJ_BIN_DIR}/${EXTERN_PROJ_NAME}/${EXTERN_PROJ_NAME}-prefix/src/${EXTERN_PROJ_NAME})
-      add_subdirectory(${_DIR} ${_DIR})
+      add_subdirectory(${_DIR} ${_DIR}/build)
    else()
       find_package(${EXTERN_PROJ_NAME} ${EXTERN_PROJ_VERSION} QUIET)
       list(APPEND CMAKE_MODULE_PATH "${EXTERN_PROJ_DIR}/lib/cmake/${EXTERN_PROJ_DIR}")
