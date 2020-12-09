@@ -22,7 +22,6 @@ function(get_package_info NAME VERSION)
    if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
       set(PKG_NM "brew")
    endif()
-   message(STATUS "${CMAKE_SYSTEM}")
    #string(REGEX MATCH
 endfunction()
 
