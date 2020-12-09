@@ -15,6 +15,8 @@ macro(extern_project name)
       set(EXTERN_PROJ_CONFIGURE_CMD "CONFIGURE_COMMAND ")
    endif()
 
+   set(EXTERN_PROJ_CL_ARGS "${EXTERN_PROJ_ARGS}")
+
    if(NOT EXTERN_PROJ_NO_FORWARD_ARGS)
       get_cmake_property(vars CACHE_VARIABLES)
       foreach(var ${vars})
