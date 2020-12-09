@@ -64,7 +64,7 @@ macro(get_version)
    set(multiValueArgs)
    cmake_parse_arguments(VER "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
 
-   set(${VER_VERSION} ${${CMAKE_PROJECT_NAME}_VERSION} PARENT_SCOPE)
+   set(${VER_VERSION} ${${CMAKE_PROJECT_NAME}_VERSION})
 endmacro()
 
 macro(get_version_components)
