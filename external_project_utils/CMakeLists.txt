@@ -11,6 +11,9 @@ macro(extern_project name)
 
    set(EXTERN_PROJ_NAME ${name})
 
+   if(NOT EXTERN_PROJ_PKG_NAME)
+      set(EXTERN_PROJ_PKG_NAME ${name})
+
    if(EXTERN_PROJ_SKIP_CONFIG)
       set(EXTERN_PROJ_CONFIGURE_CMD "CONFIGURE_COMMAND = \"\"")
    endif()
