@@ -5,7 +5,7 @@ set(BITS_EXTERN_PROJ_BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}"
 
 macro(extern_project name)
    set(options OPTIONAL NO_FORWARD_ARGS SKIP_INSTALL SKIP_BUILD SKIP_CONFIG)
-   set(oneValueArgs REPO TAG DIR ADD_SUBDIR VERSION)
+   set(oneValueArgs REPO TAG DIR ADD_SUBDIR VERSION PKG_NAME)
    set(multiValueArgs ARGS)
    cmake_parse_arguments(EXTERN_PROJ "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
 
@@ -57,7 +57,7 @@ macro(extern_project name)
       set(_DIR ${BITS_EXTERN_PROJ_BIN_DIR}/${EXTERN_PROJ_NAME}/${EXTERN_PROJ_NAME}-prefix/src/${EXTERN_PROJ_NAME})
       add_subdirectory(${_DIR} ${_DIR}/build)
    else()
-      find_package(${EXTERN_PROJ_NAME} ${EXTERN_PROJ_VERSION} QUIET)
+      find_package(${EXTERN_PKG_NAME} ${EXTERN_PROJ_VERSION} QUIET)
       list(APPEND CMAKE_MODULE_PATH "${EXTERN_PROJ_DIR}/lib/cmake/${EXTERN_PROJ_DIR}")
    endif()
 endmacro()
