@@ -31,17 +31,17 @@ macro(extern_project name)
       endforeach()
    endif()
 
+   
+   if(EXTERN_PROJ_SKIP_BUILD)
+      set(EXTERN_PROJ_BUILD_CMD "cmake -E echo \"Skipping build step.\"")
+   else()
+      set(EXTERN_PROJ_BUILD_CMD ${CMAKE_COMMAND} "--build . --parallel ${PROC_COUNT}")
+   endif()
+
    if(EXTERN_PROJ_SKIP_INSTALL)
       set(EXTERN_PROJ_INSTALL_CMD "cmake -E echo \"Skipping install step.\"")
    else()
-      set(EXTERN_PROJ_INSTALL_CMD ${CMAKE_COMMAND} --build . --target install)
-   endif()
-
-   if(EXTERN_PROJ_SKIP_BUILD)
-      set(EXTERN_PROJ_BUILD_CMD "cmake -E echo \"Skipping build step.\"")
-      set(EXTERN_PROJ_INSTALL_CMD "cmake -E echo \"Skipping install step.\"")
-   else()
-      set(EXTERN_PROJ_BUILD_CMD ${CMAKE_COMMAND} --build . --parallel ${PROC_COUNT})
+      set(EXTERN_PROJ_INSTALL_CMD ${CMAKE_COMMAND} "--install . --parallel ${PROC_COUNT} --config Debug")
    endif()
 
    configure_file(${BITS_EXTERN_PROJ_SOURCE_DIR}/template.in
