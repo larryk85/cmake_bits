@@ -86,4 +86,3 @@ macro(get_version_components)
       set(${VER_SUFF} ${${PROJ}_VERSION_TWEAK})
    endif()
 endmacro()
-
