@@ -1,5 +1,18 @@
 include(ProcessorCount)
 
+# ▄▄▄▄· ▪  ▄▄▄▄▄.▄▄ · 
+# ▐█ ▀█▪██ •██  ▐█ ▀. 
+# ▐█▀▀█▄▐█· ▐█.▪▄▀▀▀█▄
+# ██▄▪▐█▐█▌ ▐█▌·▐█▄▪▐█  _          _ _ _   
+# ·▀▀▀▀ ▀▀▀ ▀▀▀  ▀▀▀▀  | |        | (_) |                         
+#   ___ _ __ ___   __ _| | _____  | |_| |__  _ __ __ _ _ __ _   _ 
+#  / __| '_ ` _ \ / _` | |/ / _ \ | | | '_ \| '__/ _` | '__| | | |
+# | (__| | | | | | (_| |   <  __/ | | | |_) | | | (_| | |  | |_| |
+#  \___|_| |_| |_|\__,_|_|\_\___| |_|_|_.__/|_|  \__,_|_|   \__, |
+#                                                            __/ |
+#                                                           |___/ 
+
+
 set(BITS_EXTERN_PROJ_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
    CACHE FILEPATH "file path to the external_project directory")
 set(BITS_EXTERN_PROJ_BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}"

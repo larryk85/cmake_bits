@@ -1,8 +1,7 @@
-macro(create_dependency)
+function(bits_create_dependency)
    set(options)
    set(oneValueArgs
       NAME # name of the dependency to be used elsewhere
-
    )
    set(multiValueArgs
       PACKMAN_INFO
@@ -28,4 +27,4 @@ macro(create_dependency)
       endif()
    endif()
 
-endmacro()
+endfunction(bits_create_dependency)

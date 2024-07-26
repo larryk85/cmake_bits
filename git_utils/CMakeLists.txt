@@ -1,48 +1,111 @@
+#  ░▒▓██████▓▒░░▒▓█▓▒░▒▓████████▓▒░ 
+# ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░  ░▒▓█▓▒░     
+# ░▒▓█▓▒░      ░▒▓█▓▒░  ░▒▓█▓▒░     
+# ░▒▓█▓▒▒▓███▓▒░▒▓█▓▒░  ░▒▓█▓▒░     
+# ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░  ░▒▓█▓▒░     
+# ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░  ░▒▓█▓▒░     
+#  ░▒▓██████▓▒░░▒▓█▓▒░  ░▒▓█▓▒░     
+
 find_package(Git)
 
-if(NOT GIT_SRC_DIR)
-   set(GIT_SRC_DIR ${CMAKE_SOURCE_DIR})
-endif()
-
-if(NOT ${GIT_FOUND})
-   message(FATAL_ERROR "git program is not found, install to use this utility")
-endif()
-
-if(NOT EXISTS ${GIT_SRC_DIR}/.git)
-   message(FATAL_ERROR "(no .git found) this is not a git supported project")
-endif()
-
-function(git_submodule_update)
-   set(options ONLY_WARN)
-   set(oneValueArgs)
-   set(multiValueArgs)
-   cmake_parse_arguments(GIT_SUBMOD "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
-
-   if(GIT_SUBMOD_ONLY_WARN)
-      execute_process(
-         COMMAND ${GIT_EXECUTABLE} submodule status --recursive
-         WORKING_DIRECTORY         "${GIT_SRC_DIR}"
-         OUTPUT_VARIABLE           STAT
-         ERROR_QUIET
-         OUTPUT_STRIP_TRAILING_WHITESPACE
-      )
-      string(REGEX MATCH "[-\+]" RE_MATCH ${STAT})
-      if(NOT RE_MATCH)
-         message(FATAL_ERROR "git submodules are out of sync with the project, please run `git submodule update --init --recursive`")
-      endif()
+if(NOT Git_FOUND)
+   if(NOT BITS_GIT_EXEC)
+      message(FATAL_ERROR "git program is not found, install to use this utility")
    else()
-      execute_process(
-         COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
-         WORKING_DIRECTORY         "${GIT_SRC_DIR}"
-         ERROR_QUIET
-         OUTPUT_STRIP_TRAILING_WHITESPACE
-      )
+      set(GIT_EXECUTABLE ${BITS_GIT_EXEC})
    endif()
-endfunction()
+endif()
 
-function(git_info)
+macro(bits_source_directory output)
+   if(ARGN)
+      set(${output} ${ARGN} PARENT_SCOPE)
+   else()
+      set(${output} ${PROJECT_SOURCE_DIR} PARENT_SCOPE)
+   endif()
+endmacro(bits_source_directory)
+
+function(bits_is_git_project output)
    set(options)
-   set(oneValueArgs BRANCH COMMIT IS_DIRTY IS_DIRTY_ALPHA LOG_INFO TAG)
+   set(oneValueArgs DIRECTORY)
+   set(multiValueArgs)
+   cmake_parse_arguments(ARGS "${options}" 
+                              "${oneValueArgs}" 
+                              "${multiValueArgs}" 
+                              "${ARGN}")
+   
+   bits_source_directory(src_dir ${ARGS_DIRECTORY})
+
+   set(${output} EXISTS "${src_dir}/.git" PARENT_SCOPE)
+endfunction(bits_is_git_project)
+
+function(bits_git_submodule_synced output)
+   set(options VERBOSE)
+   set(oneValueArgs DIRECTORY)
+   set(multiValueArgs)
+   cmake_parse_arguments(ARGS "${options}" 
+                              "${oneValueArgs}" 
+                              "${multiValueArgs}" 
+                              "${ARGN}")
+
+   bits_source_directory(src_dir ${ARGS_DIRECTORY})
+
+   execute_process(
+      COMMAND ${GIT_EXECUTABLE} submodule status --recursive
+      WORKING_DIRECTORY         "${src_dir}"
+      OUTPUT_VARIABLE           out
+      ERROR_QUIET
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+   )
+   string(REGEX MATCH "[-\+]" matches ${out})
+   if(NOT matches AND ARGS_VERBOSE)
+      message(WARNING "git submodules are out of sync with the project, please run `git submodule update --init --recursive`")
+   endif()
+   set(${output} ${matches} PARENT_SCOPE)
+endfunction(bits_git_submodule_synced)
+
+function(bits_git_submodule_update)
+   set(options)
+   set(oneValueArgs DIRECTORY)
+   set(multiValueArgs)
+   cmake_parse_arguments(ARGS "${options}" 
+                              "${oneValueArgs}" 
+                              "${multiValueArgs}" 
+                              "${ARGN}")
+   
+   bits_source_directory(src_dir ${ARGS_DIRECTORY})
+
+   execute_process(
+      COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
+      WORKING_DIRECTORY "${src_dir}"
+      ERROR_QUIET
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+   )
+endfunction(bits_git_submodule_update)
+
+function(bits_exec_git cmd output)
+   set(options)
+   set(oneValueArgs DIRECTORY)
+   set(multiValueArgs)
+   cmake_parse_arguments(ARGS "${options}" 
+                              "${oneValueArgs}" 
+                              "${multiValueArgs}" 
+                              "${ARGN}")
+   
+   bits_source_directory(src_dir ${ARGS_DIRECTORY})
+
+   execute_process(
+      COMMAND ${GIT_EXECUTABLE} ${cmd}
+      WORKING_DIRECTORY "${src_dir}"
+      OUTPUT_VARIABLE out
+      ERROR_QUIET
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+   )
+   set(${output} ${out} PARENT_SCOPE)
+endfunction(bits_exec_git)
+
+function(bits_git_info)
+   set(options)
+   set(oneValueArgs DIRECTORY BRANCH COMMIT IS_DIRTY IS_DIRTY_ALPHA LOG_INFO TAG)
    set(multiValueArgs)
    cmake_parse_arguments(GIT_INFO "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
 
