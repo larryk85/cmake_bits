@@ -1,4 +1,6 @@
-cmake_minimum_required(VERSION 3.8)
-project(cmake_bits)
+include(ProcessorCount)
 
-include(bits.cmake)
+add_subdirectory(external_project_utils)
+add_subdirectory(dependency_utils)
+add_subdirectory(git_utils)
+add_subdirectory(version_utils)

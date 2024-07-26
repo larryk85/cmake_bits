@@ -59,7 +59,7 @@ macro(extern_project name)
 
    if(EXTERN_PROJ_ADD_SUBDIR)
       set(_DIR ${BITS_EXTERN_PROJ_BIN_DIR}/${EXTERN_PROJ_NAME}/${EXTERN_PROJ_NAME}-prefix/src/${EXTERN_PROJ_NAME})
-      add_subdirectory(${_DIR} ${_DIR}/build)
+      add_subdirectory(${_DIR} ${_DIR}/build) # !KEEP THIS add_subdirectory!
    else()
       find_package(${EXTERN_PROJ_PKG_NAME} ${EXTERN_PROJ_VERSION} QUIET)
       list(APPEND CMAKE_MODULE_PATH "${EXTERN_PROJ_DIR}/lib/cmake/${EXTERN_PROJ_DIR}")
