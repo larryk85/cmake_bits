@@ -10,6 +10,8 @@
 #                                                            __/ |
 #                                                           |___/ 
 
+project(foo)
+
 include(ProcessorCount)
 
 if(NOT BITS_NO_DEPENDENCY_UTILS)
@@ -31,3 +33,6 @@ endif()
 if(NOT BITS_NO_VERSION_UTILS)
    add_subdirectory(version_utils)
 endif()
+
+bits_git_info(output LOG)
+message(STATUS "GIT INFO: ${output}")
